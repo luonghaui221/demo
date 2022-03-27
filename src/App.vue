@@ -1,28 +1,68 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <task-list
+    @taskEdit="taskEdit"
+    @taskDelete="deleteTask"
+    @taskCreate="taskCreate"
+    :tasks="tasks"
+  />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import taskList from "./components/TaskList.vue";
+const tasks = [
+  {
+    id: 1,
+    name: "Desktop Support Technician",
+    status: true,
+  },
+  {
+    id: 2,
+    name: "Senior Sales Associate",
+    status: true,
+  },
+  {
+    id: 3,
+    name: "Web Developer III",
+    status: false,
+  },
+  {
+    id: 4,
+    name: "Actuary",
+    status: true,
+  },
+  {
+    id: 5,
+    name: "Help Desk Operator",
+    status: true,
+  },
+];
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      tasks: tasks,
+    };
+  },
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    taskList,
+  },
+  methods: {
+    deleteTask(id){
+      let index = this.tasks.findIndex(t=>t.id===id)
+      this.tasks.splice(index,1)
+    },
+    taskCreate(name,status){
+      let id = this.tasks[this.tasks.length-1].id+1;
+      this.tasks.push({id,name,status})
+    },
+    taskEdit(task){
+      let index = this.tasks.findIndex(t=>t.id===task.id)
+      if(index>=0) this.$set(this.tasks,index,task)
+    }
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
